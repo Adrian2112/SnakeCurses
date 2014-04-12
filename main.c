@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
     WINDOW *world;
     SnakePart snake[SNAKE_INITIAL_LENGTH];
  
+    // ncurses initialization
     initscr();
     noecho();
     cbreak();
@@ -29,15 +30,13 @@ int main(int argc, char *argv[]) {
     
     refresh();
  
+    //initialize world
     world = create_world();
+    box(world, 0 , 0);
+
+    // initialize snake
     int snake_size = sizeof(snake)/sizeof(SnakePart);
     initialize_snake(snake, snake_size);
- 
-    box(world, 0 , 0);
- 
-    move_snake(world, snake, snake_size);
-
-    wrefresh(world);
  
     int ch;
     while ((ch = getch()) != 'q')
