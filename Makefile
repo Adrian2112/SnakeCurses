@@ -1,2 +1,3 @@
+files = linked_list.c
 all:
-		gcc main.c -o snake -lcurses
+		gcc -o snake main.c $(files) -lcurses
