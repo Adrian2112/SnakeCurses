@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
     cbreak();
     timeout(TICKRATE);
     keypad(stdscr, TRUE);
+    curs_set(0);
     
     refresh();
  
