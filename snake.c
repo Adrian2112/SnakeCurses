@@ -1,13 +1,14 @@
 #include <ncurses.h>
 #include "defines.h"
 #include "linked_list.h"
+#include "snake.h"
 
-void appendSnakePartWithPoint(List *snake, Point *position);
+void appendSnakePartWithPoint(Snake *snake, Point *position);
 
-List *snake_create(int size)
+Snake *snake_create(int size)
 {
    int i;
-   List *snake = ll_create_list();
+   Snake *snake = ll_create_list();
 
    for (i = 0; i < size; i++) {
      Point *position = malloc(sizeof(Point));
@@ -20,7 +21,7 @@ List *snake_create(int size)
    return snake;
 }
 
-void snake_move(List *snake, Direction direction)
+void snake_move(Snake *snake, Direction direction)
 {
   ListNode *current_node = snake->head;
   ListNode *next_node = current_node->next;
@@ -63,7 +64,7 @@ void snake_move(List *snake, Direction direction)
   snake_tail_part->y += moveY;
 }
 
-void snake_add_part_to_tail(List *snake)
+void snake_add_part_to_tail(Snake *snake)
 {
   ListNode *snake_tail = snake->head;
   ListNode *pre_tail = snake_tail->next;
@@ -96,7 +97,7 @@ void snake_add_part_to_tail(List *snake)
 
 /*  private  */
 
-void appendSnakePartWithPoint(List *snake, Point *position)
+void appendSnakePartWithPoint(Snake *snake, Point *position)
 {
      ListNode *node = malloc(sizeof(ListNode));
      node->value = (void *)position;

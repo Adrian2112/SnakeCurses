@@ -16,13 +16,13 @@ WINDOW *create_world();
 
 Direction direction_for_key(int ch);
 int are_points_equal(Point a, Point b);
-void draw_snake(WINDOW *, List *snake);
+void draw_snake(WINDOW *, Snake *snake);
 
 Point new_food_position(void);
  
 int main(int argc, char *argv[]) {
     WINDOW *world;
-    List *snake;
+    Snake *snake;
     Point food_point;
     Direction direction = RIGHT;
 
@@ -124,7 +124,7 @@ int are_points_equal(Point a, Point b)
   return 0;
 }
 
-void draw_snake(WINDOW *win, List *snake)
+void draw_snake(WINDOW *win, Snake *snake)
 {
   ListNode *snake_part = snake->head;
 
