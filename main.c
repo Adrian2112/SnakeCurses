@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <stdio.h>
+#include <time.h>
 #include "linked_list.h"
  
 #define WORLD_WIDTH 50
@@ -11,21 +12,25 @@
 
 typedef enum Direction { UP, DOWN, RIGHT, LEFT } Direction;
 
-typedef struct SnakePart {
+typedef struct Point {
   int x;
   int y;
-} SnakePart;
+} Point;
 
 WINDOW *create_world();
 
 List *create_snake(void);
 void move_snake(WINDOW *window, List *snake, Direction direction);
+
+Point new_food_position(void);
  
 int main(int argc, char *argv[]) {
     WINDOW *world;
-    /*SnakePart snake[SNAKE_INITIAL_LENGTH];*/
     List *snake;
+    Point food_point;
     Direction direction = RIGHT;
+
+    srand(time(NULL));
  
     // ncurses initialization
     initscr();
@@ -45,23 +50,31 @@ int main(int argc, char *argv[]) {
 
     // initialize snake
     snake = create_snake();
+
+    food_point = new_food_position();
  
     int ch;
     while ((ch = getch()) != 'q')
     {
       move_snake(world, snake, direction);
+      mvwaddch(world, food_point.y, food_point.x, 'O');
+      wrefresh(world);
       if(ch != ERR) {
         switch(ch) {
           case KEY_UP:
+          case 'k':
             direction = UP;
             break;
           case KEY_DOWN:
+          case 'j':
             direction = DOWN;
             break;
           case KEY_RIGHT:
+          case 'l':
             direction = RIGHT;
             break;
           case KEY_LEFT:
+          case 'h':
             direction = LEFT;
             break;
           default:
@@ -92,7 +105,7 @@ List *create_snake(void){
    List *snake = ll_create_list();
 
    for (i = 0; i < SNAKE_INITIAL_LENGTH; i++) {
-     SnakePart *snake_part = malloc(sizeof(SnakePart));
+     Point *snake_part = malloc(sizeof(Point));
      snake_part->x = i+1;
      snake_part->y = 1;
 
@@ -115,8 +128,8 @@ void move_snake(WINDOW *win, List *snake, Direction direction)
   // each part copy the position of the next part except last one
   while(next_node != NULL)
   {
-    SnakePart *current_snake_part = (SnakePart *)current_node->value;
-    SnakePart *next_snake_part = (SnakePart *)next_node->value;
+    Point *current_snake_part = (Point *)current_node->value;
+    Point *next_snake_part = (Point *)next_node->value;
 
     current_snake_part->x = next_snake_part->x;
     current_snake_part->y = next_snake_part->y;
@@ -145,11 +158,20 @@ void move_snake(WINDOW *win, List *snake, Direction direction)
   }
 
   ListNode *snake_tail_node = snake->tail;
-  SnakePart *snake_tail_part = (SnakePart *)snake_tail_node->value;
+  Point *snake_tail_part = (Point *)snake_tail_node->value;
 
   snake_tail_part->x += moveX;
   snake_tail_part->y += moveY;
   mvwaddch(win, snake_tail_part->y, snake_tail_part->x, '#');
 
   wrefresh(win);
+}
+
+Point new_food_position()
+{
+  Point food_position;
+  food_position.x = (rand() % WORLD_WIDTH-1) + 1;
+  food_position.y = (rand() % WORLD_HEIGHT-1) + 1;
+
+  return food_position;
 }
