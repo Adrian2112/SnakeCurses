@@ -21,6 +21,7 @@ WINDOW *create_world();
 
 List *create_snake(void);
 void move_snake(WINDOW *window, List *snake, Direction direction);
+Direction direction_for_key(int ch);
 
 Point new_food_position(void);
  
@@ -60,26 +61,7 @@ int main(int argc, char *argv[]) {
       mvwaddch(world, food_point.y, food_point.x, 'O');
       wrefresh(world);
       if(ch != ERR) {
-        switch(ch) {
-          case KEY_UP:
-          case 'k':
-            direction = UP;
-            break;
-          case KEY_DOWN:
-          case 'j':
-            direction = DOWN;
-            break;
-          case KEY_RIGHT:
-          case 'l':
-            direction = RIGHT;
-            break;
-          case KEY_LEFT:
-          case 'h':
-            direction = LEFT;
-            break;
-          default:
-            break;
-        }
+        direction = direction_for_key(ch);
       }
     }
  
@@ -165,6 +147,21 @@ void move_snake(WINDOW *win, List *snake, Direction direction)
   mvwaddch(win, snake_tail_part->y, snake_tail_part->x, '#');
 
   wrefresh(win);
+}
+
+Direction direction_for_key(int ch)
+{
+  switch(ch) {
+    case KEY_UP: 
+    case 'k':
+      return UP;
+    case KEY_DOWN: case 'j':
+      return DOWN;
+    case KEY_RIGHT: case 'l':
+      return RIGHT;
+    default:
+      return LEFT;
+  }
 }
 
 Point new_food_position()
