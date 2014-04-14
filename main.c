@@ -15,6 +15,7 @@
 WINDOW *create_world();
 
 Direction direction_for_key(int ch);
+int are_points_equal(Point a, Point b);
 void draw_snake(WINDOW *, List *snake);
 
 Point new_food_position(void);
@@ -55,9 +56,19 @@ int main(int argc, char *argv[]) {
       box(world, 0 , 0);
 
       snake_move(snake, direction);
+
+      Point *snake_head = (Point *)snake->tail->value;
+      if (are_points_equal(food_point, *snake_head)) {
+        food_point = new_food_position();
+        snake_add_part_to_tail(snake);
+      }
+
+      // draw elements
       mvwaddch(world, food_point.y, food_point.x, 'O');
       draw_snake(world, snake);
+
       wrefresh(world);
+
       if(ch != ERR) {
         direction = direction_for_key(ch);
       }
@@ -103,6 +114,16 @@ Point new_food_position()
 
   return food_position;
 }
+
+int are_points_equal(Point a, Point b)
+{
+  if (a.x == b.x && a.y == b.y) {
+    return 1;
+  }
+
+  return 0;
+}
+
 void draw_snake(WINDOW *win, List *snake)
 {
   ListNode *snake_part = snake->head;

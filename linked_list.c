@@ -32,6 +32,23 @@ void ll_append_list_node(List *list, ListNode *node)
   list->size += 1;
 }
 
+void ll_prepend_list_node(List *list, ListNode *node)
+{
+  if (list == NULL) { return; }
+
+  if(list->head == NULL)
+  {
+    list->head = node;
+    list->tail = node;
+  } else 
+  {
+    node->next = list->head;
+    list->head = node;
+  }
+
+  list->size += 1;
+}
+
 void ll_free_list(List *list)
 {
   int size = list->size;
