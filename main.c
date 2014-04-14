@@ -8,7 +8,7 @@
  
 #define WORLD_WIDTH 50
 #define WORLD_HEIGHT 20
-#define TICKRATE 300
+#define TICKRATE 100
 
 #define SNAKE_INITIAL_LENGTH 3
 
