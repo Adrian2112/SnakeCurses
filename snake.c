@@ -20,11 +20,8 @@ List *snake_create(int size)
    return snake;
 }
 
-void snake_move(WINDOW *win, List *snake, Direction direction)
+void snake_move(List *snake, Direction direction)
 {
-  wclear(win);
-  box(win, 0 , 0);
-
   ListNode *current_node = snake->head;
   ListNode *next_node = current_node->next;
 
@@ -36,7 +33,6 @@ void snake_move(WINDOW *win, List *snake, Direction direction)
 
     current_snake_part->x = next_snake_part->x;
     current_snake_part->y = next_snake_part->y;
-    mvwaddch(win, current_snake_part->y, current_snake_part->x, '#');
 
     current_node = current_node->next;
     next_node = current_node->next;
@@ -65,7 +61,4 @@ void snake_move(WINDOW *win, List *snake, Direction direction)
 
   snake_tail_part->x += moveX;
   snake_tail_part->y += moveY;
-  mvwaddch(win, snake_tail_part->y, snake_tail_part->x, '#');
-
-  wrefresh(win);
 }

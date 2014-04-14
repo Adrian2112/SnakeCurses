@@ -15,6 +15,7 @@
 WINDOW *create_world();
 
 Direction direction_for_key(int ch);
+void draw_snake(WINDOW *, List *snake);
 
 Point new_food_position(void);
  
@@ -50,8 +51,12 @@ int main(int argc, char *argv[]) {
     int ch;
     while ((ch = getch()) != 'q')
     {
-      snake_move(world, snake, direction);
+      wclear(world);
+      box(world, 0 , 0);
+
+      snake_move(snake, direction);
       mvwaddch(world, food_point.y, food_point.x, 'O');
+      draw_snake(world, snake);
       wrefresh(world);
       if(ch != ERR) {
         direction = direction_for_key(ch);
@@ -97,4 +102,16 @@ Point new_food_position()
   food_position.y = (rand() % WORLD_HEIGHT-1) + 1;
 
   return food_position;
+}
+void draw_snake(WINDOW *win, List *snake)
+{
+  ListNode *snake_part = snake->head;
+
+  while(snake_part != NULL)
+  {
+    Point *snake_part_position = (Point *)snake_part->value;
+    mvwaddch(win, snake_part_position->y, snake_part_position->x, '#');
+
+    snake_part = snake_part->next;
+  }
 }
