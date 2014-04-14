@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
       wclear(world);
       box(world, 0 , 0);
 
-      snake_move(snake, direction);
+      snake_move(snake, direction, WORLD_WIDTH, WORLD_HEIGHT);
 
       Point *snake_head = (Point *)snake->tail->value;
       if (are_points_equal(food_point, *snake_head)) {

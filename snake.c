@@ -4,6 +4,7 @@
 #include "snake.h"
 
 void appendSnakePartWithPoint(Snake *snake, Point *position);
+int getPositionInBound(int n, int max_bound);
 
 Snake *snake_create(int size)
 {
@@ -21,7 +22,7 @@ Snake *snake_create(int size)
    return snake;
 }
 
-void snake_move(Snake *snake, Direction direction)
+void snake_move(Snake *snake, Direction direction, int max_width, int max_height)
 {
   ListNode *current_node = snake->head;
   ListNode *next_node = current_node->next;
@@ -62,6 +63,11 @@ void snake_move(Snake *snake, Direction direction)
 
   snake_tail_part->x += moveX;
   snake_tail_part->y += moveY;
+
+
+  snake_tail_part->x = getPositionInBound(snake_tail_part->x, max_width);
+  snake_tail_part->y = getPositionInBound(snake_tail_part->y, max_height);
+
 }
 
 void snake_add_part_to_tail(Snake *snake)
@@ -102,4 +108,19 @@ void appendSnakePartWithPoint(Snake *snake, Point *position)
      ListNode *node = malloc(sizeof(ListNode));
      node->value = (void *)position;
      ll_append_list_node(snake, node);
+}
+
+int getPositionInBound(int n, int max_bound)
+{
+  // if move beyond min bound move to the max bound
+  if (n < 0) {
+    n = max_bound;
+  }
+  // check that dont go over max bound
+  else
+  {
+    n = n % max_bound;
+  }
+
+  return n;
 }
